@@ -1,0 +1,18 @@
+
+
+h5{
+	text-align: center;
+}
+
+.perfil1 {
+  	background-color: lightblue;
+}
+
+.error-img{
+	text-align: center;
+}
+
+.inactive {
+     pointer-events: none;
+     cursor: default;
+  } 
