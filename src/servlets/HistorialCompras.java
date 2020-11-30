@@ -46,7 +46,7 @@ public class HistorialCompras extends HttpServlet {
 			request.setAttribute("pedidoN", Pedidos.getInstance().getDetallesPedido(nPedido));
 			request.setAttribute("nPedido", nPedido);
 			request.setAttribute("totalCompra", totalCompra);
-			if((boolean) session.getAttribute("isAdmin")) {
+			if(request.getParameter("admin") != null) {
 				RequestDispatcher dispatcher = request.getRequestDispatcher("admin_panel.jsp?menu=6");
 				dispatcher.forward(request, response);
 				return;
@@ -55,12 +55,12 @@ public class HistorialCompras extends HttpServlet {
 			dispatcher.forward(request, response);
 		}
 		
-		
+		/*
 		if((boolean) session.getAttribute("isAdmin")) {
 			RequestDispatcher dispatcher = request.getRequestDispatcher("Admin_panel?menu=3");
 			dispatcher.forward(request, response);
 			return;
-		}
+		}*/
 		int id = (int)session.getAttribute("id");
 		request.setAttribute("pedidos", Pedidos.getInstance().getListaPedido(id));
 		RequestDispatcher dispatcher = request.getRequestDispatcher("profile.jsp?menu=4");

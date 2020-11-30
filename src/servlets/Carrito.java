@@ -1,6 +1,8 @@
 package servlets;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -11,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import productos.Cart;
+import productos.Producto;
 import productos.Stock;
 import util.Validaciones;
 
@@ -26,50 +29,50 @@ public class Carrito extends HttpServlet {
      */
     public Carrito() {
         super();
-        // TODO Auto-generated constructor stub
+        
     }
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
+	@SuppressWarnings("unchecked")
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
 		Double miSaldo = (Double)session.getAttribute("saldo");
 		int codigo;
 		String success="", errores="";
 		
-		
 		if(request.getParameter("agregar") != null) {
 			codigo = Integer.parseInt(request.getParameter("agregar")); 
-			Cart.getInstance().agregarALista(codigo);
-			Cart.getInstance().agregarACarrito(codigo, 0);
+			((ArrayList<Integer>) session.getAttribute("listaProductos")).add(codigo);
 			success = "Producto agregado al carrito!";
 			request.setAttribute("success", success);
 			RequestDispatcher dispatcher = request.getRequestDispatcher("index.jsp");
 			dispatcher.forward(request, response);
+			return;
 		}
 		if(request.getParameter("comprar") != null) {
 			response.sendRedirect("profile.jsp?menu=3");
 			return;
 		}
 		if(request.getParameter("eliminar") != null) {
-			Cart.getInstance().quitarDeLista(Integer.parseInt(request.getParameter("eliminar")));
-			Cart.getInstance().quitarDeCarrito(Integer.parseInt(request.getParameter("eliminar")));
+			
+			codigo = Integer.parseInt(request.getParameter("eliminar"));
+			((ArrayList<Integer>)session.getAttribute("listaProductos")).remove((Object)codigo);
 			response.sendRedirect("profile.jsp?menu=3");
 			return;
 		}
 		if(request.getParameter("confirmarCompra") != null) {
-			if(Cart.getInstance().getTotal()>miSaldo) {
+			if((double)session.getAttribute("totalCompra")>miSaldo) {
 				errores ="Tu saldo es insuficiente para realizar la compra. Debe realizar una recarga.";
 			}
 			else {
-				if(Cart.getInstance().getListaProductos().isEmpty()) {
+				if(((ArrayList<Integer>)session.getAttribute("listaProductos")).isEmpty()) {
 					errores = "No hay productos para en el pedido.";
 				}
 				else {
-					if(Cart.getInstance().crearPedido((int)session.getAttribute("id"))) {
+					if(Cart.getInstance().crearPedido(session)) {
 						success = "Pedido creado con exito!";
-						Cart.getInstance().clearList();
 					}
 					else {
 						errores = "Error al cargar en la base de datos.";
@@ -80,31 +83,43 @@ public class Carrito extends HttpServlet {
 			request.setAttribute("success", success);
 			RequestDispatcher dispatcher = request.getRequestDispatcher("profile.jsp?menu=5");
 			dispatcher.forward(request, response);
+			return;
 		}
 		if(session.getAttribute("logeado") != null) {
 			response.sendRedirect("profile.jsp?menu=3");
 			return;
 		}
 	}
-
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
+	@SuppressWarnings("unchecked")
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String success="", errores="";
+		double total = 0.0;
+		HashMap<Integer, Producto> carrito = new HashMap<Integer, Producto>();
+		HttpSession session = request.getSession();
 		
-		if(Cart.getInstance().getListaCarrito().size()==0) {
-			response.sendRedirect("profile.jsp?menu=3");
+		if(((ArrayList<Integer>)session.getAttribute("listaProductos")).size()==0) {
+			errores = "Lista vacia, primero agrege algun producto!";
+			request.setAttribute("errores", errores);
+			RequestDispatcher dispatcher = request.getRequestDispatcher("profile.jsp?menu=3");
+			dispatcher.forward(request, response);
 			return;
 		}
 		
-		for (int codigo : Cart.getInstance().getListaCarrito()) {
+		for (int codigo : (ArrayList<Integer>)session.getAttribute("listaProductos")) {
 			if(Validaciones.validaNumInt(request.getParameter("cantidadDe"+codigo))) {
 				int cantidad = Integer.parseInt(request.getParameter("cantidadDe"+codigo));
 				if(cantidad>=1) {
 					if(Stock.getInstance().getProducto(codigo).getCantidad()>=cantidad) {
-						Cart.getInstance().agregarACarrito(codigo, cantidad);
-						success = "Cantidad agregada.";						
+						Producto producto = Stock.getInstance().getProducto(codigo);
+						producto.setCantidad(cantidad);
+						total += producto.getTotal();
+						carrito.put(codigo,producto);
+						//Cart.getInstance().agregarACarrito(codigo, cantidad);
+						success = "Cantidad agregada.";			
+						errores = "";
 					}
 					else {
 						String producto = Stock.getInstance().getProducto(codigo).getNombre();
@@ -127,6 +142,10 @@ public class Carrito extends HttpServlet {
 			dispatcher.forward(request, response);
 		}
 		else {
+			session.setAttribute("totalCompra", total);
+			session.setAttribute("carritoCompra", carrito);
+			request.setAttribute("total", total);
+			request.setAttribute("carrito", carrito);
 			request.setAttribute("errores", errores);
 			request.setAttribute("success", success);
 			RequestDispatcher dispatcher = request.getRequestDispatcher("profile.jsp?menu=5");

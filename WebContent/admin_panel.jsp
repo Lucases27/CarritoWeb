@@ -53,7 +53,7 @@
 					<jsp:include page="includes/admin_pedidos.jsp"></jsp:include>
 				</c:when>
 				<c:when test="${param.menu == 6}">
-					<jsp:include page="includes/historial_detalles.jsp"></jsp:include>
+					<jsp:include page="includes/historial_detallesAdmin.jsp"></jsp:include>
 				</c:when>
 				<c:otherwise>
 				</c:otherwise>

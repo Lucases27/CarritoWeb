@@ -15,6 +15,12 @@
 					<!-- COMPROBAMOS SI ESTA LOGEADO Y SI ES ADMIN PARA MOSTRAR LOS DISTINTOS MENUS -->
 					<c:choose>  
 					    <c:when test="${isAdmin}">  
+					    	<li class="nav-item active">
+								<a class="nav-link text-success" href="Saldo">
+									Saldo: $
+									<c:out value="${saldo}"></c:out>
+								</a>
+							</li>
 					       	<li class="nav-item active">
 								<a class="nav-link" href="Admin_panel">Admin Panel</a>
 							</li>
@@ -41,7 +47,7 @@
 					       	<li class="nav-item active">
 								<a class="nav-link" href="Login?salir=1">Salir</a>
 							</li>
-					    </c:when>  
+					    </c:when>
 					    <c:otherwise>    	
 							<li class="nav-item active">
 								<a class="nav-link" href="Register">Registrarse</a>

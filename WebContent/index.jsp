@@ -53,7 +53,7 @@
            		<tbody>
 	                <c:forEach items="${Stock.getInstance().getProductoLista()}" var="prod">
 	                	<c:set var = "codigo" value = "${prod.getCodigo()}"/>
-	                	<c:set var = "existe" value = "${Cart.getInstance().existeEnLista(codigo)}"/>
+	                	<c:set var = "existe" value = "${listaProductos.contains(codigo)}"/>
 	                	<tr>
 	                 	<td>${prod.getNombre()}</td>
 	                 	<td class="text-center">${prod.getPrecio()}</td>
@@ -70,7 +70,7 @@
 						    	<td class="text-center"><a class="btn btn-outline-primary btn-sm" href="Carrito?agregar=${codigo}">Agregar al carrito</a></td>
 						    </c:when> 
 						    <c:when test="${logeado and prod.getCantidad() > 0 and existe}">
-						    	<td class="text-center"><a class="btn btn-outline-success btn-sm" href="Carrito?agregar=${codigo}">Ya Agregado</a></td>
+						    	<td class="text-center"><a class="btn btn-outline-success btn-sm inactive" href="#">Ya Agregado</a></td>
 						    </c:when>
 						    <c:when test="${logeado and prod.getCantidad() < 1 }">
 								<td class="text-center"><a class="btn btn-outline-danger btn-sm inactive" href="#">Sin stock</a></td>

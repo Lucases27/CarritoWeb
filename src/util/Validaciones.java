@@ -75,7 +75,7 @@ public class Validaciones {
 		num = num.replace(",", ".");
 		try {
 			double numero = Double.parseDouble(num);
-			ok = numero>0?true:false;
+			ok = numero>=0?true:false;
 		} catch (NumberFormatException e) {
 			ok = false;
 		}
@@ -92,7 +92,7 @@ public class Validaciones {
 		try {
 			num = num.replace(",", ".");
 			int numero = Integer.parseInt(num);
-			ok = numero>0?true:false;
+			ok = numero>=0?true:false;
 		} catch (NumberFormatException e) {
 			ok = false;
 		} catch (NullPointerException e) {

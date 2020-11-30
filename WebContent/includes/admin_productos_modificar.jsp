@@ -24,13 +24,13 @@
 				<label>Codigo:<input class="form-control" readonly type="text" name="codigo" placeholder="${prod}"/></label>
 			</div>
 			<div class="form-group">
-				<label>Nombre: <input class="form-control" type="text" name="nombre" placeholder="Nombre del producto"/></label>
+				<label>Nombre: <input class="form-control" type="text" name="nombre" placeholder="Nombre" value="${nom}"/></label>
 			</div>
 			<div class="form-group">
-				<label>Precio<input class="form-control" type="text" name="precio" placeholder="Precio del producto"/></label>
+				<label>Precio<input class="form-control" type="text" name="precio" placeholder="Precio" value="${precio}"/></label>
 			</div>
 			<div class="form-group">
-				<label>Cantidad:<input class="form-control" type="text" name="cantidad" placeholder="Cantidad del producto"/></label>
+				<label>Cantidad:<input class="form-control" type="text" name="cantidad" placeholder="Cantidad" value="${cant}"/></label>
 			</div>
 			<input type="hidden" value="modificar" name="producto">
 			<input type="hidden" value="${prod}" name="codigoProducto">

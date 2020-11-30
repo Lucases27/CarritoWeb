@@ -6,11 +6,15 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import javax.servlet.http.HttpSession;
+
 import util.DBConnection;
 import util.Monedero;
 
 public class Cart {
-	
+	// Esta clase ahora es inutil y solo utilizamos el metodo crearPedido. 
+	// Los demas metodos ya no se usan en ninguna parte de la aplicacion,
+	// Ya que ahora guardamos todos los datos del carrito en Sesion!
 	private static Cart Carrito = null;
 	private HashMap<Integer, Producto> carrito = new HashMap<Integer, Producto>();
 	private ArrayList<Integer> listaProductos = new ArrayList<Integer>();
@@ -132,8 +136,17 @@ public class Cart {
 		listaProductos.clear();
 	}
 	
-	public boolean crearPedido(int id) {
+	/**
+	 * Crea el pedido y lo carga a la DB, en la tabla pedidos, y pedidos_detalles. 
+	 * @param session La session en donde esta cargado el hashmap de pedidos con sus respectivas cantidades.
+	 * @return true si no hubo error.
+	 */
+	@SuppressWarnings("unchecked")
+	public boolean crearPedido(HttpSession session) {
 		int npedido = 0;
+		int id = (int) session.getAttribute("id");
+		carrito = (HashMap<Integer, Producto>) session.getAttribute("carritoCompra");
+		total = (Double) session.getAttribute("totalCompra");
 		DBConnection db = new DBConnection();
 		Connection con = db.getConexion();
 		try {
@@ -151,6 +164,10 @@ public class Cart {
 			}
 			Monedero.getInstance().restarSaldo(total, id);
 			con.close();
+			clearList();
+			((HashMap<Integer, Producto>) session.getAttribute("carritoCompra")).clear();
+			((ArrayList<Integer>) session.getAttribute("listaProductos")).clear();
+			session.setAttribute("totalCompra", 0.0);
 			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();

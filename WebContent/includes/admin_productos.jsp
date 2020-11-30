@@ -24,12 +24,15 @@
 	                <c:forEach items="${Stock.getInstance().getProductoLista()}" var="producto">
 	                	<tr>
 	                 	<td>${producto.getCodigo()}</td>
-	                 	<c:set var="codigo" value="${producto.getCodigo()}"/>
 	                 	<td>${producto.getNombre()}</td>
 	                 	<td>${producto.getPrecio()}</td>
 	                 	<td>${producto.getCantidad()}</td>
+	                 	<c:set var="codigo" value="${producto.getCodigo()}"/>
+	                 	<c:set var="nom" value="${producto.getNombre()}"/>
+	                 	<c:set var="precio" value="${producto.getPrecio()}"/>
+	                 	<c:set var="cant" value="${producto.getCantidad()}"/>
 						<td class="text-center">
-							<a class="btn btn-outline-primary btn-sm" href="Admin_panel?menu=2&opt=2&prod=${codigo}">Modificar</a>
+							<a class="btn btn-outline-primary btn-sm" href="Admin_panel?menu=2&opt=2&prod=${codigo}&nom=${nom}&precio=${precio}&cant=${cant}">Modificar</a>
 							<a class="btn btn-outline-primary btn-sm" href="Admin_panel?menu=2&opt=2&prod=${codigo}&eliminar=1">Eliminar</a>
 						</td>
 	                	</tr>

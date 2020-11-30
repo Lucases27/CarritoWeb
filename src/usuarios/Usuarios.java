@@ -3,9 +3,11 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.servlet.http.HttpSession;
 
+import productos.Producto;
 import util.*;
 
 public class Usuarios {
@@ -329,6 +331,7 @@ public class Usuarios {
 	 * @param session
 	 */
 	public void cargarSession(String user, String pass, HttpSession session) {
+		ArrayList<Integer> listaProductos = new ArrayList<Integer>();
 		session.setAttribute("user", user);
 		session.setAttribute("pass", pass);		
 		session.setAttribute("email", getInstance().getUser(user).getEmail());
@@ -337,6 +340,7 @@ public class Usuarios {
 		session.setAttribute("saldo", getInstance().getUser(user).getSaldo());
 		session.setAttribute("activo", getInstance().getUser(user).getActivo());
 		session.setAttribute("logeado", true);
+		session.setAttribute("listaProductos", listaProductos);
 		if(getInstance().isAdmin((Integer)session.getAttribute("id"))) {
 			session.setAttribute("isAdmin", true);
 			System.out.println(session.getAttribute("id"));

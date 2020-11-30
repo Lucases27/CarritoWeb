@@ -11,7 +11,7 @@
 	<c:choose>
 	    <c:when test="${pedidos.size()>0}">
 		   	<div class="font-italic text-center">
-				<h6>Registro de pedidos.</h6>
+				<h6>Registro de TODOS los pedidos.</h6>
 			</div>
 	    </c:when>  
 	    <c:otherwise>
@@ -26,7 +26,7 @@
 	            <thead>
 	                <tr style="background:#003325;color:white" class="text-center">
 	                    <td>Nº de Pedido</td>
-	                    <td>Nº de Cliente</td>
+	                    <td>Usuario</td>
 	                    <td>Fecha de compra</td>
 	                    <td>Estado</td>
 	                </tr>
@@ -35,11 +35,11 @@
 	                <c:forEach items="${pedidos}" var="pedido">
 	                	<tr>
 	                 	<td>${pedido.getnPedido()}</td>
-	                 	<td>${pedido.getnCliente()}</td>
+	                 	<td>${Usuarios.getInstance().getUser(pedido.getnCliente()).getNombreUsuario()}</td>
 	                 	<td>${pedido.getFecha()}</td>
 	                 	<td>${pedido.getEstado()}</td>
 	                 	<td>
-							<a class="btn btn-outline-primary btn-sm" href="HistorialCompras?detalles=${pedido.getnPedido()}">Detalles</a>
+							<a class="btn btn-outline-primary btn-sm" href="HistorialCompras?detalles=${pedido.getnPedido()}&admin=1">Detalles</a>
 						</td>
 	                	</tr>
 	            	</c:forEach>

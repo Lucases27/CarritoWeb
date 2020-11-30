@@ -9,7 +9,7 @@
 </c:choose>
 <div class="col-6 ml-n3 mt-n1">
 	<c:choose>
-	    <c:when test="${Cart.getInstance().getListaCarrito().size()>0}">
+	    <c:when test="${listaProductos.size()>0}">
 		   	<div class="font-italic text-center">
 				<h6>Lista de productos en tu carrito</h6>
 			</div>
@@ -33,22 +33,23 @@
 		                </tr>
 		            </thead>
 	           		<tbody>
-		                <c:forEach items="${Cart.getInstance().getListaProductos()}" var="prod">
-		                	<tr>
-		                 	<td>${prod.getNombre()}</td>
-		                 	<td class="text-center">${prod.getPrecio()}</td>
-		                 	<td class="text-center"><input type="text" name="cantidadDe${prod.getCodigo()}" placeholder="Cantidad" value="1"></td>
-							<td class="text-center">
-								<a class="btn btn-outline-primary btn-sm" href="Carrito?eliminar=${prod.getCodigo()}">Eliminar</a>
-							</td>
-		                	</tr>
+		                <c:forEach items="${Stock.getInstance().getProductoLista()}" var="prod">
+		                	<c:choose>
+							    <c:when test="${listaProductos.contains(prod.getCodigo())}">
+				                	<tr>
+					                 	<td>${prod.getNombre()}</td>
+					                 	<td class="text-center">${prod.getPrecio()}</td>
+					                 	<td class="text-center"><input type="text" name="cantidadDe${prod.getCodigo()}" placeholder="Cantidad" value="1"></td>
+										<td class="text-center">
+											<a class="btn btn-outline-primary btn-sm" href="Carrito?eliminar=${prod.getCodigo()}">Eliminar</a>
+										</td>
+				                	</tr>
+						    	</c:when>    
+							</c:choose>
 		            	</c:forEach>
 		            </tbody>
 		        </table>
 		    </div>
-		</div>
-		<div>
-			<p>Tolal: $${Cart.getInstance().getTotal()}</p>
 		</div>
  		<!-- MENSAJE DE EXITO/ERROR -->
 		<div class="text-center mb-3 p-0">

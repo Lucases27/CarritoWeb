@@ -21,7 +21,7 @@
 	                </tr>
 	            </thead>
            		<tbody>
-	                <c:forEach items="${Cart.getInstance().getListaProductos()}" var="producto">
+	                <c:forEach items="${carrito.values()}" var="producto">
 	                	<tr>
 	                 	<td>${producto.getNombre()}</td>
 	                 	<td>${producto.getPrecio()}</td>
@@ -34,7 +34,7 @@
 	    </div>
 	</div>
 	<div class="text-right mr-3">
-		<p>Tolal: $${Cart.getInstance().getTotal()}</p>
+		<p>Tolal: $${total}</p>
 	</div>
 	<!-- MENSAJE DE EXITO/ERROR -->
 	<div class="text-center mb-3">

@@ -76,16 +76,19 @@ public class Admin_panel extends HttpServlet {
 								}
 								else {
 									request.setAttribute("prod", request.getParameter("prod"));
+									request.setAttribute("nom", request.getParameter("nom"));
+									request.setAttribute("precio", request.getParameter("precio"));
+									request.setAttribute("cant", request.getParameter("cant"));
 								}
 							}
 						}
 					}
 					else{
 						if(request.getParameter("menu").equals("3")) {
-							System.out.println("estas en pedidos");
 							request.setAttribute("pedidos", Pedidos.getInstance().getListaPedido());
 							RequestDispatcher dispatcher = request.getRequestDispatcher("admin_panel.jsp?menu=3");
 							dispatcher.forward(request, response);		
+							return;
 						}
 					}
 					RequestDispatcher dispatcher = request.getRequestDispatcher("admin_panel.jsp");
@@ -144,7 +147,7 @@ public class Admin_panel extends HttpServlet {
 						if(Validaciones.validaNumInt(cantidad)) {
 							Double precioOk = Double.parseDouble(precio);
 							int cantidadOk = Integer.parseInt(cantidad);
-							if(cantidadOk >= 0 & precioOk >= 0) {
+							if(cantidadOk >= 0 & precioOk > 0) {
 								if(!Stock.getInstance().updateNombre(nombre, codigo)) {
 									if(Stock.getInstance().updateProducto(codigo, nombre, precioOk, cantidadOk)) {
 										success = "Producto modificado.";
@@ -153,7 +156,7 @@ public class Admin_panel extends HttpServlet {
 								}
 								else errores = "El producto ya existe.";
 							}
-							else errores = "El precio y la cantidad no pueden ser negativos.";
+							else errores = "El precio y la cantidad no pueden ser negativos. Y el precio no puede ser 0";
 						}
 						else errores = "Cantidad invalida, verifique.";
 					}
